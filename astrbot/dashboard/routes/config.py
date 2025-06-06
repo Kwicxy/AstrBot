@@ -190,7 +190,7 @@ class ConfigRoute(Route):
         logger.debug(f"Attempting to check provider: {status_info['name']} (ID: {status_info['id']}, Type: {status_info['type']}, Model: {status_info['model']})")
         try:
             logger.debug(f"Sending 'Ping' to provider: {status_info['name']}")
-            response = await asyncio.wait_for(provider.text_chat(prompt="REPLY `PONG` ONLY", timeout=45.0))
+            response = await asyncio.wait_for(provider.text_chat(prompt="REPLY `PONG` ONLY"), timeout=45.0)
             logger.debug(f"Received response from {status_info['name']}: {response}")
             # 只要 text_chat 调用成功返回一个 LLMResponse 对象 (即 response 不为 None)，就认为可用
             if response is not None:
@@ -215,7 +215,7 @@ class ConfigRoute(Route):
         except Exception as e:
             error_message = str(e)
             status_info["error"] = error_message
-            logger.warning(f"Provider {status_info['name']} (ID: {status_info['id']}) is unavailable. Error: {error_message}")
+            logger.error(f"Provider {status_info['name']} (ID: {status_info['id']}) is unavailable. Error: {error_message}")
             logger.debug(f"Traceback for {status_info['name']}:\n{traceback.format_exc()}")
         return status_info
 
